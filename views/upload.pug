@@ -1,0 +1,155 @@
+doctype html 
+
+head
+    title=name
+    link(href='https://fonts.googleapis.com/css?family=Inconsolata:400,700', rel='stylesheet')
+    link(rel='stylesheet', href='css/bootstrap.css')
+    link(rel='stylesheet', href='css/style.css')
+    script(src='js/modernizr-2.6.2.min.js')
+    link(href='css/bootstrap.css' rel='stylesheet')
+    style.
+        body{padding-top:60px}@media (max-width:767px){.description{display:none}}
+    link(href='css/u/blueimp-gallery.min.css' rel='stylesheet')
+    link(href='css/u/jquery.fileupload.css' rel='stylesheet')
+    link(href='css/u/jquery.fileupload-ui.css' rel='stylesheet')
+
+br
+
+body
+.container
+  form#fileupload(action='/u' enctype='multipart/form-data' method='POST')
+    .fileupload-buttonbar.row
+      .col-lg-7
+        span.btn.btn-success.fileinput-button
+          i.glyphicon.glyphicon-plus
+          span Add files...
+          input(type='file' multiple='' name='files[]')
+        button.btn.btn-primary.start(type='submit')
+          i.glyphicon.glyphicon-upload
+          span Start upload
+        button.btn.btn-warning.cancel(type='reset')
+          i.glyphicon.glyphicon-ban-circle
+          span Cancel upload
+        button.btn.btn-danger.delete(type='button')
+          i.glyphicon.glyphicon-trash
+          span Delete selected
+        input.toggle(type='checkbox')
+        span.fileupload-process
+      .col-lg-5.fade.fileupload-progress
+        .active.progress.progress-striped(aria-valuemax='100' aria-valuemin='0' role='progressbar')
+          .progress-bar.progress-bar-success(style='width:0%')
+        .progress-extended &nbsp;
+    table.table.table-striped(role='presentation')
+      tbody.files
+  #blueimp-gallery.blueimp-gallery.blueimp-gallery-controls(data-filter=':even')
+    .slides
+    h3.title
+    a.prev &lsaquo;
+    a.next &rsaquo;
+    a.close &times;
+    a.play-pause
+    ol.indicator
+  script#template-upload(type='text/x-tmpl').
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+    <td>
+    <span class="preview"></span>
+    </td>
+    <td>
+    {% if (window.innerWidth > 480 || !o.options.loadImageFileTypes.test(file.type)) { %}
+    <p class="name">{%=file.name%}</p>
+    {% } %}
+    <strong class="error text-danger"></strong>
+    </td>
+    <td>
+    <p class="size">Processing...</p>
+    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+    </td>
+    <td>
+    {% if (!o.options.autoUpload && o.options.edit && o.options.loadImageFileTypes.test(file.type)) { %}
+    <button class="btn btn-success edit" data-index="{%=i%}" disabled>
+    <i class="glyphicon glyphicon-edit"></i>
+    <span>Edit</span>
+    </button>
+    {% } %}
+    {% if (!i && !o.options.autoUpload) { %}
+    <button class="btn btn-primary start" disabled>
+    <i class="glyphicon glyphicon-upload"></i>
+    <span>Start</span>
+    </button>
+    {% } %}
+    {% if (!i) { %}
+    <button class="btn btn-warning cancel">
+    <i class="glyphicon glyphicon-ban-circle"></i>
+    <span>Cancel</span>
+    </button>
+    {% } %}
+    </td>
+    </tr>
+    {% } %}
+  script#template-download(type='text/x-tmpl').
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+    <td>
+    <span class="preview">
+    {% if (file.thumbnailUrl) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+    {% } %}
+    </span>
+    </td>
+    <td>
+    {% if (window.innerWidth > 480 || !file.thumbnailUrl) { %}
+    <p class="name">
+    {% if (file.url) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+    {% } else { %}
+    <span>{%=file.name%}</span>
+    {% } %}
+    </p>
+    {% } %}
+    {% if (file.error) { %}
+    <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+    {% } %}
+    </td>
+    <td>
+    <span class="size">{%=o.formatFileSize(file.size)%}</span>
+    </td>
+    <td>
+    {% if (file.deleteUrl) { %}
+    <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+    <i class="glyphicon glyphicon-trash"></i>
+    <span>Delete</span>
+    </button>
+    <input type="checkbox" name="delete" value="1" class="toggle">
+    {% } else { %}
+    <button class="btn btn-warning cancel">
+    <i class="glyphicon glyphicon-ban-circle"></i>
+    <span>Cancel</span>
+    </button>
+    {% } %}
+    </td>
+    </tr>
+    {% } %}
+
+  a(href="/f")
+    button.btn.btn-primary.start(type='button')
+      i.glyphicon.glyphicon-search
+      span Browse
+
+  script(src='js/jquery.min.js')
+  script(src='js/u/vendor/jquery.ui.widget.js')
+  script(src='js/u/tmpl.min.js')
+  script(src='js/u/load-image.all.min.js')
+  script(src='js/u/canvas-to-blob.min.js')
+  script(src='js/bootstrap.min.js')
+  script(src='js/u/jquery.blueimp-gallery.min.js')
+  script(src='js/u/jquery.iframe-transport.js')
+  script(src='js/u/jquery.fileupload.js')
+  script(src='js/u/jquery.fileupload-process.js')
+  script(src='js/u/jquery.fileupload-image.js')
+  script(src='js/u/jquery.fileupload-audio.js')
+  script(src='js/u/jquery.fileupload-video.js')
+  script(src='js/u/jquery.fileupload-validate.js')
+  script(src='js/u/jquery.fileupload-ui.js')
+  script(src='js/u/main.js')
+  script(src='js/main.js')
